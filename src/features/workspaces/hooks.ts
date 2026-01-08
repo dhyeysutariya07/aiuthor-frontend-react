@@ -161,3 +161,22 @@ export function useRemoveMember() {
         },
     })
 }
+
+// Permissions hook
+export function useWorkspacePermissions(workspaceId: string) {
+    const { data: workspaces } = useWorkspaces()
+
+    const workspace = workspaces?.find(w => w.id === workspaceId)
+    // specific workspace query might provide more details but for now list is efficient
+    const role = workspace?.my_role
+
+    return {
+        role,
+        isAdmin: role === 'ADMIN',
+        isEditor: role === 'EDITOR',
+        isAuthor: role === 'AUTHOR',
+        canManageWorkspace: role === 'ADMIN',
+        canManageMembers: role === 'ADMIN',
+        canEditContent: role === 'ADMIN' || role === 'EDITOR',
+    }
+}

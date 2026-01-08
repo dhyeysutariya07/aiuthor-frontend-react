@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Loader2, LogIn } from 'lucide-react'
+import { useGoogleLogin } from '@react-oauth/google'
 import { IconGoogle } from '@/assets/brand-icons'
-import { useLogin } from '@/features/auth/hooks'
+import { useLogin, useGoogleLogin as useBackendGoogleLogin } from '@/features/auth/hooks'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -46,6 +47,18 @@ export function UserAuthForm({
 }: UserAuthFormProps) {
   const navigate = useNavigate()
   const loginMutation = useLogin()
+  const googleLoginMutation = useBackendGoogleLogin()
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      googleLoginMutation.mutate({
+        access_token: tokenResponse.access_token,
+      })
+    },
+    onError: () => {
+      console.error('Google Login Failed')
+    },
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,9 +88,7 @@ export function UserAuthForm({
   }
 
   const handleGoogleLogin = () => {
-    // TODO: Implement Google OAuth flow
-    // This should redirect to Google OAuth or open a popup
-    alert('Google OAuth not implemented yet. Please implement the OAuth flow.')
+    googleLogin()
   }
 
   return (
@@ -142,7 +153,7 @@ export function UserAuthForm({
         <Button
           variant='outline'
           type='button'
-          disabled={loginMutation.isPending}
+          disabled={loginMutation.isPending || googleLoginMutation.isPending}
           onClick={handleGoogleLogin}
           className='w-full'
         >

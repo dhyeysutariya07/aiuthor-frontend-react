@@ -69,18 +69,28 @@ export function WorkspaceActions({ workspace }: WorkspaceActionsProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end'>
-                    <DropdownMenuItem onClick={() => setShowEditDialog(true)}>
-                        <Pencil className='mr-2 h-4 w-4' /> Edit Name
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setShowMembersDialog(true)}>
-                        <Users className='mr-2 h-4 w-4' /> Manage Members
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onClick={() => setShowDeleteDialog(true)}
-                        className='text-red-600'
-                    >
-                        <Trash className='mr-2 h-4 w-4' /> Delete
-                    </DropdownMenuItem>
+                    {workspace.my_role === 'ADMIN' && (
+                        <>
+                            <DropdownMenuItem onClick={() => setShowEditDialog(true)}>
+                                <Pencil className='mr-2 h-4 w-4' /> Edit Name
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setShowMembersDialog(true)}>
+                                <Users className='mr-2 h-4 w-4' /> Manage Members
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => setShowDeleteDialog(true)}
+                                className='text-red-600'
+                            >
+                                <Trash className='mr-2 h-4 w-4' /> Delete
+                            </DropdownMenuItem>
+                        </>
+                    )}
+                    {/* Potential future actions for non-admins could go here */}
+                    {workspace.my_role !== 'ADMIN' && (
+                        <DropdownMenuItem disabled>
+                            No actions available
+                        </DropdownMenuItem>
+                    )}
                 </DropdownMenuContent>
             </DropdownMenu>
 

@@ -8,6 +8,7 @@ export interface Workspace {
     updated_at?: string
     // workspace_memberships URL is returned but we might not need to store it if we fetch members separately
     workspace_memberships?: string
+    my_role?: WorkspaceRole
 }
 
 export interface CreateWorkspaceRequest {

@@ -29,7 +29,7 @@ export function TeamSwitcher() {
     return workspaces.find((w) => w.id === workspaceId) || workspaces[0]
   }, [workspaces, workspaceId])
 
-  if (isLoading || !activeWorkspace) {
+  if (isLoading) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
@@ -60,9 +60,11 @@ export function TeamSwitcher() {
               </div>
               <div className='grid flex-1 text-start text-sm leading-tight'>
                 <span className='truncate font-semibold'>
-                  {activeWorkspace.name}
+                  {activeWorkspace?.name || 'Select Workspace'}
                 </span>
-                <span className='truncate text-xs'>Workspace</span>
+                <span className='truncate text-xs'>
+                  {activeWorkspace ? 'Workspace' : 'No workspace selected'}
+                </span>
               </div>
               <ChevronsUpDown className='ms-auto' />
             </SidebarMenuButton>

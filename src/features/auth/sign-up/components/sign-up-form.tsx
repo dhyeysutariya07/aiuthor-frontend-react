@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useGoogleLogin } from '@react-oauth/google'
 import { IconGoogle } from '@/assets/brand-icons'
-import { useRegister } from '@/features/auth/hooks'
+import { useRegister, useGoogleLogin as useBackendGoogleLogin } from '@/features/auth/hooks'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -44,6 +45,18 @@ export function SignUpForm({
   ...props
 }: React.HTMLAttributes<HTMLFormElement>) {
   const registerMutation = useRegister()
+  const googleLoginMutation = useBackendGoogleLogin()
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      googleLoginMutation.mutate({
+        access_token: tokenResponse.access_token,
+      })
+    },
+    onError: () => {
+      console.error('Google SignUp Failed')
+    },
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,9 +78,7 @@ export function SignUpForm({
   }
 
   const handleGoogleSignUp = () => {
-    // TODO: Implement Google OAuth flow
-    // This should redirect to Google OAuth or open a popup
-    alert('Google OAuth not implemented yet. Please implement the OAuth flow.')
+    googleLogin()
   }
 
   return (
@@ -147,7 +158,7 @@ export function SignUpForm({
         <Button
           variant='outline'
           type='button'
-          disabled={registerMutation.isPending}
+          disabled={registerMutation.isPending || googleLoginMutation.isPending}
           onClick={handleGoogleSignUp}
           className='w-full'
         >

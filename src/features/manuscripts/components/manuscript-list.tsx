@@ -18,6 +18,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useManuscripts, useDeleteManuscript } from '../hooks'
 import { CreateManuscriptDialog } from './create-manuscript-dialog'
 import { Badge } from '@/components/ui/badge'
+import { useWorkspacePermissions } from '@/features/workspaces/hooks'
 
 interface ManuscriptListProps {
     workspaceId: string
@@ -25,6 +26,7 @@ interface ManuscriptListProps {
 
 export function ManuscriptList({ workspaceId }: ManuscriptListProps) {
     const { data: manuscripts, isLoading, error } = useManuscripts(workspaceId)
+    const { canEditContent } = useWorkspacePermissions(workspaceId)
 
     const { mutate: deleteManuscript } = useDeleteManuscript()
 
@@ -55,7 +57,7 @@ export function ManuscriptList({ workspaceId }: ManuscriptListProps) {
         <div className='space-y-4'>
             <div className='flex items-center justify-between'>
                 <h3 className='text-lg font-medium'>Manuscripts</h3>
-                <CreateManuscriptDialog workspaceId={workspaceId} />
+                {canEditContent && <CreateManuscriptDialog workspaceId={workspaceId} />}
             </div>
 
             <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
@@ -71,26 +73,28 @@ export function ManuscriptList({ workspaceId }: ManuscriptListProps) {
                                     <FileText className='h-4 w-4 text-muted-foreground' />
                                     <CardTitle className='text-base'>{manuscript.title}</CardTitle>
                                 </Link>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant='ghost' size='icon' className='h-8 w-8'>
-                                            <MoreVertical className='h-4 w-4' />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align='end'>
-                                        <DropdownMenuItem>
-                                            <Edit className='mr-2 h-4 w-4' />
-                                            Edit
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            className='text-destructive'
-                                            onClick={() => deleteManuscript({ id: manuscript.id, workspaceId })}
-                                        >
-                                            <Trash2 className='mr-2 h-4 w-4' />
-                                            Delete
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                {canEditContent && (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant='ghost' size='icon' className='h-8 w-8'>
+                                                <MoreVertical className='h-4 w-4' />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align='end'>
+                                            <DropdownMenuItem>
+                                                <Edit className='mr-2 h-4 w-4' />
+                                                Edit
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className='text-destructive'
+                                                onClick={() => deleteManuscript({ id: manuscript.id, workspaceId })}
+                                            >
+                                                <Trash2 className='mr-2 h-4 w-4' />
+                                                Delete
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                )}
                             </div>
                             <CardDescription className='line-clamp-2'>
                                 {manuscript.description || 'No description provided.'}
