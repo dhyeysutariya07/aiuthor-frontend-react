@@ -1,5 +1,4 @@
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
-import { DocumentList } from '@/features/manuscripts/components/document-list'
+import { createFileRoute, Link, Outlet, useParams } from '@tanstack/react-router'
 import { useChapters } from '@/features/manuscripts/hooks'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -41,7 +40,7 @@ function RouteComponent() {
         </p>
       </div>
 
-      <DocumentList />
+      <Outlet />
     </>
   )
 }

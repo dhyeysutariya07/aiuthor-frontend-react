@@ -15,7 +15,9 @@ export const manuscriptKeys = {
     detail: (id: string) => [...manuscriptKeys.all, 'detail', id] as const,
     chapters: (manuscriptId: string) => [...manuscriptKeys.all, 'chapters', manuscriptId] as const,
     documents: (manuscriptId: string, chapterId: string) => [...manuscriptKeys.all, 'documents', manuscriptId, chapterId] as const,
+    editorConfig: (documentId: string) => [...manuscriptKeys.all, 'editorConfig', documentId] as const,
 }
+
 
 // Queries
 export function useManuscripts(workspaceId?: string) {
@@ -49,6 +51,19 @@ export function useChapterDocuments(manuscriptId: string, chapterId: string) {
         enabled: !!manuscriptId && !!chapterId,
     })
 }
+
+export function useDocumentEditorConfig(documentId: string) {
+    console.log('useDocumentEditorConfig called with documentId:', documentId)
+    return useQuery({
+        queryKey: manuscriptKeys.editorConfig(documentId),
+        queryFn: () => {
+            console.log('Fetching editor config for documentId:', documentId)
+            return manuscriptApi.getDocumentEditorConfig(documentId)
+        },
+        enabled: !!documentId,
+    })
+}
+
 
 // Mutations
 export function useCreateManuscript() {

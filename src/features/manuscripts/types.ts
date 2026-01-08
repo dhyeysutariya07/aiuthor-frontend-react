@@ -49,3 +49,38 @@ export interface ChapterDocument {
     file: string
     document_versions: string // API URL for versions
 }
+
+// OnlyOffice Editor Configuration Types
+export interface OnlyOfficeConfig {
+    document: {
+        fileType: string
+        key: string
+        title: string
+        url: string
+        permissions?: {
+            comment?: boolean
+            download?: boolean
+            edit?: boolean
+            fillForms?: boolean
+            modifyContentControl?: boolean
+            modifyFilter?: boolean
+            print?: boolean
+            review?: boolean
+        }
+    }
+    documentType: 'word' | 'cell' | 'slide'
+    editorConfig: {
+        callbackUrl?: string
+        lang?: string
+        mode?: 'edit' | 'view'
+        user?: {
+            id: string
+            name: string
+        }
+        customization?: any
+    }
+    height?: string
+    width?: string
+    token?: string
+}
+

@@ -34,6 +34,8 @@ import { Route as AuthenticatedWorkspacesWorkspaceIdIndexRouteImport } from './r
 import { Route as AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteImport } from './routes/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/route'
 import { Route as AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRouteImport } from './routes/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/index'
 import { Route as AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteImport } from './routes/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId'
+import { Route as AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRouteImport } from './routes/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/index'
+import { Route as AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRouteImport } from './routes/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId.$documentId.edit'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -181,6 +183,24 @@ const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterId
         AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRoute,
     } as any,
   )
+const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute =
+  AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRouteImport.update(
+    {
+      id: '/',
+      path: '/',
+      getParentRoute: () =>
+        AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute,
+    } as any,
+  )
+const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute =
+  AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRouteImport.update(
+    {
+      id: '/$documentId/edit',
+      path: '/$documentId/edit',
+      getParentRoute: () =>
+        AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
@@ -206,7 +226,9 @@ export interface FileRoutesByFullPath {
   '/workspaces/$workspaceId/': typeof AuthenticatedWorkspacesWorkspaceIdIndexRoute
   '/workspaces/$workspaceId/manuscripts/$manuscriptId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteWithChildren
   '/workspaces/$workspaceId/manuscripts/$manuscriptId/': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRoute
-  '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute
+  '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteWithChildren
+  '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute
+  '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof authForgotPasswordRoute
@@ -229,7 +251,8 @@ export interface FileRoutesByTo {
   '/workspaces': typeof AuthenticatedWorkspacesIndexRoute
   '/workspaces/$workspaceId': typeof AuthenticatedWorkspacesWorkspaceIdIndexRoute
   '/workspaces/$workspaceId/manuscripts/$manuscriptId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRoute
-  '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute
+  '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute
+  '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -257,7 +280,9 @@ export interface FileRoutesById {
   '/_authenticated/workspaces/$workspaceId/': typeof AuthenticatedWorkspacesWorkspaceIdIndexRoute
   '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteWithChildren
   '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRoute
-  '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute
+  '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteWithChildren
+  '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute
+  '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit': typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -286,6 +311,8 @@ export interface FileRouteTypes {
     | '/workspaces/$workspaceId/manuscripts/$manuscriptId'
     | '/workspaces/$workspaceId/manuscripts/$manuscriptId/'
     | '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId'
+    | '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/'
+    | '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -309,6 +336,7 @@ export interface FileRouteTypes {
     | '/workspaces/$workspaceId'
     | '/workspaces/$workspaceId/manuscripts/$manuscriptId'
     | '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId'
+    | '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit'
   id:
     | '__root__'
     | '/_authenticated'
@@ -336,6 +364,8 @@ export interface FileRouteTypes {
     | '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId'
     | '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/'
     | '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId'
+    | '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/'
+    | '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -527,6 +557,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteImport
       parentRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRoute
     }
+    '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/': {
+      id: '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/'
+      path: '/'
+      fullPath: '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/'
+      preLoaderRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRouteImport
+      parentRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute
+    }
+    '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit': {
+      id: '/_authenticated/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit'
+      path: '/$documentId/edit'
+      fullPath: '/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit'
+      preLoaderRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRouteImport
+      parentRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute
+    }
   }
 }
 
@@ -553,9 +597,27 @@ const AuthenticatedSettingsRouteRouteWithChildren =
     AuthenticatedSettingsRouteRouteChildren,
   )
 
+interface AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteChildren {
+  AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute
+  AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute
+}
+
+const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteChildren: AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteChildren =
+  {
+    AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute:
+      AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdIndexRoute,
+    AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute:
+      AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdDocumentIdEditRoute,
+  }
+
+const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteWithChildren =
+  AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute._addFileChildren(
+    AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteChildren,
+  )
+
 interface AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteChildren {
   AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRoute
-  AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute
+  AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute: typeof AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteWithChildren
 }
 
 const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteChildren: AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteChildren =
@@ -563,7 +625,7 @@ const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteChildre
     AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRoute:
       AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdIndexRoute,
     AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute:
-      AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRoute,
+      AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdChaptersChapterIdRouteWithChildren,
   }
 
 const AuthenticatedWorkspacesWorkspaceIdManuscriptsManuscriptIdRouteRouteWithChildren =

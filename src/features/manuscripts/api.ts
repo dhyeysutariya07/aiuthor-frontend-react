@@ -84,4 +84,13 @@ export const manuscriptApi = {
         )
         return response.data
     },
+
+    // OnlyOffice Editor Config
+    getDocumentEditorConfig: async (documentId: string): Promise<any> => {
+        const response = await apiClient.get(
+            `/documents/onlyoffice/config/${documentId}/`
+        )
+        return response.data
+    },
 }
+

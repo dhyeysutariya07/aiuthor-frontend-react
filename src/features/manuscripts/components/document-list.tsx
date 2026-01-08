@@ -1,5 +1,5 @@
 import { FileText } from 'lucide-react'
-import { useParams } from '@tanstack/react-router'
+import { Link, useParams } from '@tanstack/react-router'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -7,7 +7,7 @@ import { useChapterDocuments } from '../hooks'
 import { ChapterDocument } from '../types'
 
 export function DocumentList() {
-    const { manuscriptId, chapterId } = useParams({ strict: false }) as { manuscriptId: string; chapterId: string }
+    const { workspaceId, manuscriptId, chapterId } = useParams({ strict: false }) as { workspaceId: string; manuscriptId: string; chapterId: string }
 
     const { data: documents, isLoading, error } = useChapterDocuments(manuscriptId!, chapterId!)
 
@@ -55,14 +55,37 @@ export function DocumentList() {
                         <div className='flex items-center gap-2'>
                             <FileText className='h-4 w-4 text-blue-500' />
                             <span className='text-xs text-muted-foreground'>
-                                Version: {doc.current_version.split('-')[0]}...
+                                Version: {typeof doc.current_version === 'string'
+                                    ? doc.current_version.split('-')[0] + '...'
+                                    : String(doc.current_version).substring(0, 8) + '...'}
                             </span>
                         </div>
-                        <Button variant='link' className='mt-2 h-auto p-0 text-xs' asChild>
-                            <a href={doc.file} target='_blank' rel='noopener noreferrer'>
-                                Download File
-                            </a>
-                        </Button>
+                        <div className='mt-2 flex gap-2'>
+                            <Button
+                                variant='default'
+                                size='sm'
+                                className='h-8 text-xs'
+                                asChild
+                                onClick={() => console.log('Edit Document clicked for doc:', doc.id)}
+                            >
+                                <Link
+                                    to='/workspaces/$workspaceId/manuscripts/$manuscriptId/chapters/$chapterId/$documentId/edit'
+                                    params={{
+                                        workspaceId: workspaceId!,
+                                        manuscriptId: manuscriptId!,
+                                        chapterId: chapterId!,
+                                        documentId: doc.id,
+                                    }}
+                                >
+                                    Edit Document
+                                </Link>
+                            </Button>
+                            <Button variant='outline' size='sm' className='h-8 text-xs' asChild>
+                                <a href={`http://localhost:8000/api/documents/downloadfile/${doc.id}/`} target='_blank' rel='noopener noreferrer'>
+                                    Download
+                                </a>
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
             ))}
